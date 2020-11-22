@@ -41,7 +41,7 @@ int main(){
     	}
     }
     fclose(fp);
-    printf("File fucked\n");
+    printf("File closed\n");
 
     //export the secret key to file for later use
     FILE* secret_key = fopen("secret.key","wb");

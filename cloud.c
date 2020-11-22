@@ -158,15 +158,15 @@ void main(){
 
     //temprory variables
     LweSample* max_class = new_gate_bootstrapping_ciphertext_array(BLEN, params);
-    LweSample* max_boobs = new_gate_bootstrapping_ciphertext_array(BLEN, params);
+    LweSample* max_frequency = new_gate_bootstrapping_ciphertext_array(BLEN, params);
     LweSample* compare = new_gate_bootstrapping_ciphertext_array(2, params);
     LweSample* equal = new_gate_bootstrapping_ciphertext_array(BLEN, params);
-    LweSample* booty = new_gate_bootstrapping_ciphertext_array(BLEN, params);
     LweSample* temp = new_gate_bootstrapping_ciphertext_array(BLEN, params);
+    LweSample* temp2 = new_gate_bootstrapping_ciphertext_array(BLEN, params);
 
     for(k=0; k<BLEN; k++){
         bootsCONSTANT(&max_class[k], 0, bk);
-        bootsCONSTANT(&max_boobs[k], 0, bk);
+        bootsCONSTANT(&max_frequency[k], 0, bk);
         bootsCONSTANT(&equal[k], 0, bk);
         bootsCONSTANT(&temp[k], 0, bk);
     }
@@ -191,9 +191,9 @@ void main(){
     //Second loop for finding the max frequency class
     for(i=0; i<CLASSES; i++){
         bootsCONSTANT(&compare[0], 0, bk);
-        subtract(booty, compare, details[i].frequency, max_boobs, BLEN, bk);
+        subtract(temp2, compare, details[i].frequency, max_frequency, BLEN, bk);
         multiplexer(max_class, details[i].class_name, max_class, compare, BLEN, bk);
-        multiplexer(max_boobs, details[i].frequency, max_boobs, compare, BLEN, bk);
+        multiplexer(max_frequency, details[i].frequency, max_frequency, compare, BLEN, bk);
     }
     time_t end_time = clock();
 
@@ -224,8 +224,8 @@ void main(){
         for(j=0; j<COLUMNS; j++)
             delete_gate_bootstrapping_ciphertext_array(BLEN,cypher[i][j]);
 
-    delete_gate_bootstrapping_ciphertext_array(BLEN, booty);
-    delete_gate_bootstrapping_ciphertext_array(BLEN, max_boobs);
+    delete_gate_bootstrapping_ciphertext_array(BLEN, temp2);
+    delete_gate_bootstrapping_ciphertext_array(BLEN, max_frequency);
     delete_gate_bootstrapping_ciphertext_array(BLEN, max_class);
     delete_gate_bootstrapping_ciphertext_array(2, compare);
     delete_gate_bootstrapping_ciphertext_array(BLEN, equal);
